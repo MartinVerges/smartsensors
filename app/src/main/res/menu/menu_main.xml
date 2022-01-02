@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.verges.smartsensors.MainActivity">
+
+    <item
+        android:id="@+id/action_rescan"
+        android:icon="@drawable/sharp_refresh_24"
+        android:title="@string/menu_action_rescan"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/menu_action_settings"
+        app:showAsAction="never"
+        />
+</menu>

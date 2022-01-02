@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">smartsensors</string>
+
+    <!-- action menu -->
+    <string name="menu_action_settings">Settings</string>
+    <string name="menu_action_rescan">Rescan</string>
+
+    <!-- main view -->
+    <string name="device_list_label">Available devices</string>
+
+    <!-- tanklevel view -->
+    <string name="tank_level_label">Current Tank level</string>
+
+    <!-- battery view -->
+    <string name="battery_label">Current Battery status</string>
+
+
+    <string name="description_ble_image">bluetooth device</string>
+    <string name="tanklevel_value">%1$d %%</string>
+</resources>
