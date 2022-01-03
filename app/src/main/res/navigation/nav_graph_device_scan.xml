@@ -2,13 +2,13 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/nav_graph_device_scan"
     app:startDestination="@id/DeviceListFragment">
 
     <fragment
         android:id="@+id/DeviceListFragment"
         android:name="com.verges.smartsensors.DeviceListFragment"
-        android:label="@string/device_list_label"
+        android:label="@string/label_device_list"
         tools:layout="@layout/fragment_device_list">
         <action
             android:id="@+id/action_DeviceList_to_TankLevel"

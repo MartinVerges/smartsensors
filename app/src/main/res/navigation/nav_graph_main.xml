@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/EnableBluetoothFragment">
+
+    <fragment
+        android:id="@+id/EnableBluetoothFragment"
+        android:name="com.verges.smartsensors.EnableBluetoothFragment"
+        android:label="@string/label_request_permissions"
+        tools:layout="@layout/fragment_enable_bluetooth">
+        <action
+            android:id="@+id/action_EnableBluetoothFragment_to_LocationRequiredFragment"
+            app:destination="@id/LocationRequiredFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/LocationRequiredFragment"
+        android:name="com.verges.smartsensors.LocationRequiredFragment"
+        android:label="@string/label_request_permissions"
+        tools:layout="@layout/fragment_location_required">
+        <action
+            android:id="@+id/action_LocationRequiredFragment_to_EnableBluetoothFragment"
+            app:destination="@id/EnableBluetoothFragment" />
+    </fragment>
+
+</navigation>

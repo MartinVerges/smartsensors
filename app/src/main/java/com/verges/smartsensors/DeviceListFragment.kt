@@ -1,14 +1,9 @@
 package com.verges.smartsensors
 
-import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,10 +14,10 @@ class DeviceListFragment : Fragment() {
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
-    private var itemsList: MutableList<DeviceItems> = mutableListOf()
+    private var itemsList: MutableList<DeviceItemAdapter.DeviceItems> = mutableListOf()
     private fun prepareItems() {
         for (i in 0..49) {
-            val item = DeviceItems("Item$i", (20 + i).toString())
+            val item = DeviceItemAdapter.DeviceItems("Item$i", (20 + i).toString())
             itemsList.add(item)
         }
     }

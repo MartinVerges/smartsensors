@@ -1,6 +1,5 @@
 package com.verges.smartsensors
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,14 +10,14 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
 class DeviceItemAdapter internal constructor(private val DeviceItemsList: MutableList<DeviceItems>) :
-    Adapter<DeviceItemAdapter.MyViewHolder>() {
+    Adapter<DeviceItemAdapter.DeviceItemHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceItemHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false)
-        return MyViewHolder(view)
+        return DeviceItemHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DeviceItemHolder, position: Int) {
         val item = DeviceItemsList[position]
         holder.name.text = item.name
         holder.mac.text = item.mac
@@ -35,7 +34,9 @@ class DeviceItemAdapter internal constructor(private val DeviceItemsList: Mutabl
         return DeviceItemsList.size
     }
 
-    inner class MyViewHolder(itemView: View) : ViewHolder(itemView) {
+    class DeviceItems internal constructor(var name: String, var mac: String)
+
+    inner class DeviceItemHolder(itemView: View) : ViewHolder(itemView) {
         var name: TextView = itemView.findViewById(R.id.deviceName)
         var mac: TextView = itemView.findViewById(R.id.deviceMac)
         val itemLayout: ConstraintLayout = itemView.findViewById(R.id.itemLayout)
