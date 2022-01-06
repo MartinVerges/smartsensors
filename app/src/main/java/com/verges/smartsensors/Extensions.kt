@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 
+/*
 fun AppCompatActivity.checkSelfPermissionCompat(permission: String) =
     ActivityCompat.checkSelfPermission(this, permission)
 
@@ -48,3 +49,4 @@ fun View.showSnackbar(
         }.show()
     }
 }
+*/

@@ -1,9 +1,12 @@
 package com.verges.smartsensors
 
-import android.Manifest.permission.*
+import android.Manifest.permission.BLUETOOTH_CONNECT
+import android.Manifest.permission.BLUETOOTH_SCAN
+import android.app.Activity
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +17,9 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -21,13 +27,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.verges.smartsensors.databinding.ActivityMainBinding
 
-const val REQUEST_PERMISSION_LOCATION = 0
+
+// const val REQUEST_PERMISSION_LOCATION = 0
 
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var layout: View
+    private lateinit var view: View
 
+    /*
     fun checkPermissionAndForward() {
         if (checkSelfPermissionCompat(ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
             || checkSelfPermissionCompat(ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -76,7 +84,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                     .navigate(R.id.action_EnableBluetoothFragment_to_LocationRequiredFragment)
             }
         }
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,11 +96,19 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-        layout = findViewById(R.id.bluetoothError)
+        view = findViewById(R.id.bluetoothError)
+
+        bluetoothEnabled()
 
         findViewById<Button>(R.id.enable_bluetooth_button).setOnClickListener {
+            Snackbar.make(view, R.string.permission_denied, Snackbar.LENGTH_LONG).show()
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                requestMultiplePermissions.launch(
+                registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+                    permissions.entries.forEach {
+                        Log.d("SMARTSENSOR", "${it.key} = ${it.value}")
+                    }
+                }.launch(
                     arrayOf(
                         BLUETOOTH_SCAN,
                         BLUETOOTH_CONNECT
@@ -100,25 +116,32 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                 )
             } else {
                 val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                requestBluetooth.launch(enableBtIntent)
+                requestBt.launch(enableBtIntent)
             }
         }
     }
 
-    private var requestBluetooth =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                layout.showSnackbar(R.string.permission_granted, Snackbar.LENGTH_SHORT)
-            } else {
-                layout.showSnackbar(R.string.permission_denied, Snackbar.LENGTH_SHORT)
-            }
+    private fun bluetoothEnabled() {
+        val bluetoothManager = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val adapter = bluetoothManager.adapter
+        if (!adapter.isEnabled) {
+            // prompt the user to enable bluetooth
+            Snackbar.make(view, R.string.permission_denied, Snackbar.LENGTH_LONG).show()
+        } else {
+            view.findNavController()
+                .navigate(EnableBluetoothFragmentDirections.actionEnableBluetoothFragmentToLocationRequiredFragment())
         }
-    private val requestMultiplePermissions =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            permissions.entries.forEach {
-                Log.d("SMARTSENSOR", "${it.key} = ${it.value}")
-            }
+    }
+
+    private var requestBt = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            Snackbar.make(view, R.string.permission_granted, Snackbar.LENGTH_LONG).show()
+            view.findNavController()
+                .navigate(EnableBluetoothFragmentDirections.actionEnableBluetoothFragmentToLocationRequiredFragment())
+        } else {
+            Snackbar.make(view, R.string.permission_denied, Snackbar.LENGTH_LONG).show()
         }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

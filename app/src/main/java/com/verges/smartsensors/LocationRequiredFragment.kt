@@ -17,9 +17,9 @@ class LocationRequiredFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLocationRequiredBinding.inflate(inflater, container, false)
-        binding.grantLocationButton.setOnClickListener {
+        /*binding.grantLocationButton.setOnClickListener {
             (activity as MainActivity).checkPermissionAndForward()
-        }
+        }*/
         return binding.root
     }
 
