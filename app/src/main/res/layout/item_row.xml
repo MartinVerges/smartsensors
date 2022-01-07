@@ -37,7 +37,7 @@
         tools:text="@tools:sample/full_names" />
 
     <TextView
-        android:id="@+id/deviceMac"
+        android:id="@+id/deviceAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"

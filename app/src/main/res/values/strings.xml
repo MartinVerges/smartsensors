@@ -15,6 +15,9 @@
     <string name="button_grant_location_permission">Grant Location Permission</string>
     <string name="error_ble_not_supported">Your device does not support Bluetooth low energy (BLE).</string>
     <string name="error_bluetooth_not_supported">Your device does not support Bluetooth or BLE.</string>
+    <string name="info_start_scanning">Start scanning for devices</string>
+    <string name="info_stop_scanning">Stop scanning for devices</string>
+    <string name="error_scanning_failed">Bluetooth scanning failed due to an unknown reason</string>
 
 
     <!-- action menu -->

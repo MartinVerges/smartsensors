@@ -1,5 +1,5 @@
 package com.verges.smartsensors
-
+/*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +19,8 @@ class DeviceItemAdapter internal constructor(private val DeviceItemsList: Mutabl
 
     override fun onBindViewHolder(holder: DeviceItemHolder, position: Int) {
         val item = DeviceItemsList[position]
-        holder.name.text = item.name
-        holder.mac.text = item.mac
+        holder.deviceName.text = item.deviceName
+        holder.deviceAddress.text = item.deviceAddress
 
         holder.itemLayout.setOnClickListener {
             if (position.odd) holder.itemView.findNavController()
@@ -33,12 +33,12 @@ class DeviceItemAdapter internal constructor(private val DeviceItemsList: Mutabl
     override fun getItemCount(): Int {
         return DeviceItemsList.size
     }
-
-    class DeviceItems internal constructor(var name: String, var mac: String)
+    class DeviceItems internal constructor(var deviceName: String, var deviceAddress: String)
 
     inner class DeviceItemHolder(itemView: View) : ViewHolder(itemView) {
-        var name: TextView = itemView.findViewById(R.id.deviceName)
-        var mac: TextView = itemView.findViewById(R.id.deviceMac)
+        var deviceName: TextView = itemView.findViewById(R.id.deviceName)
+        var deviceAddress: TextView = itemView.findViewById(R.id.deviceAddress)
         val itemLayout: ConstraintLayout = itemView.findViewById(R.id.itemLayout)
     }
 }
+*/
