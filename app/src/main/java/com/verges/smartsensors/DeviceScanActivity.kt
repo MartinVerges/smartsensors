@@ -7,18 +7,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.*
-import android.widget.TextView
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.recyclerview.widget.RecyclerView
-import com.verges.smartsensors.databinding.ActivityDeviceScanBinding
-import android.util.Log
 import com.google.android.material.snackbar.Snackbar
+import com.verges.smartsensors.databinding.ActivityDeviceScanBinding
 
 
 class DeviceScanActivity : AppCompatActivity() {
@@ -30,12 +28,10 @@ class DeviceScanActivity : AppCompatActivity() {
     private lateinit var bleScanner: BluetoothLeScanner
     private lateinit var mHandler: Handler
 
-    private val bleDeviceItemAdapter: DeviceItemAdapter = DeviceItemAdapter()
-
     private var isScanning = false
 
     // Stops scanning after X seconds.
-    val SCAN_PERIOD: Long = 5000
+    private val scanPeriod: Long = 5000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +97,7 @@ class DeviceScanActivity : AppCompatActivity() {
                 bleScanner.startScan(scanFilter, scanSetting, bleScanCallback)
 
                 invalidateOptionsMenu()
-            }, SCAN_PERIOD)
+            }, scanPeriod)
 
             isScanning = true
             bleScanner.stopScan(bleScanCallback)
@@ -125,80 +121,6 @@ class DeviceScanActivity : AppCompatActivity() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             Log.d("ScanDeviceActivity", "onScanResult(${callbackType}): ${result?.device?.address} - ${result?.device?.name}")
             // C8:C9:A3:C5:DE:DE - tanksensor
-        }
-    }
-
-/*
-    private class LeDeviceListAdapter : BaseAdapter() {
-        private val bleDevices: ArrayList<BluetoothDevice> = ArrayList()
-        private val layoutInflater: LayoutInflater
-
-        init {
-            layoutInflater = this@DeviceScanActivity.getLayoutInflater()
-        }
-
-        fun addDevice(device: BluetoothDevice) {
-            if (!bleDevices.contains(device)) bleDevices.add(device)
-        }
-
-        fun getDevice(position: Int): BluetoothDevice = bleDevices[position]
-        fun clear() = bleDevices.clear()
-        override fun getCount(): Int = bleDevices.size
-        override fun getItem(i: Int): Any = bleDevices[i]
-        override fun getItemId(i: Int): Long =  i.toLong()
-
-        override fun getView(i: Int, view: View, viewGroup: ViewGroup): View {
-            val viewHolder: DeviceItemHolder
-            viewHolder = view.tag as DeviceItemHolder
-            val device = bleDevices[i]
-            val deviceName = device.name
-            if (deviceName != null && deviceName.length > 0) viewHolder.deviceName.setText(
-                deviceName
-            ) else viewHolder.deviceName.setText(R.string.unknown_device)
-            viewHolder.deviceAddress.setText(device.address)
-            return view
-        }
-    }*/
-
-    //class DeviceItems internal constructor(var name: String, var mac: String)
-
-    inner class DeviceItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var deviceName: TextView = itemView.findViewById(R.id.deviceName)
-        var deviceAddress: TextView = itemView.findViewById(R.id.deviceAddress)
-        val itemLayout: ConstraintLayout = itemView.findViewById(R.id.itemLayout)
-    }
-
-    inner class DeviceItemAdapter
-        internal constructor(private val DeviceItemsList: MutableList<DeviceItems> = mutableListOf()) :
-        RecyclerView.Adapter<DeviceItemAdapter.DeviceItemHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceItemHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false)
-            return DeviceItemHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: DeviceItemHolder, position: Int) {
-            val item = DeviceItemsList[position]
-            holder.deviceName.text = item.deviceName
-            holder.deviceAddress.text = item.deviceAddress
-
-            holder.itemLayout.setOnClickListener {
-                if (position.odd) holder.itemView.findNavController()
-                    .navigate(R.id.action_DeviceList_to_TankLevel)
-                else holder.itemView.findNavController()
-                    .navigate(R.id.action_DeviceList_to_Battery)
-            }
-        }
-
-        override fun getItemCount(): Int {
-            return DeviceItemsList.size
-        }
-        inner class DeviceItems internal constructor(var deviceName: String, var deviceAddress: String)
-
-        inner class DeviceItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var deviceName: TextView = itemView.findViewById(R.id.deviceName)
-            var deviceAddress: TextView = itemView.findViewById(R.id.deviceAddress)
-            val itemLayout: ConstraintLayout = itemView.findViewById(R.id.itemLayout)
         }
     }
 }
