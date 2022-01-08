@@ -1,13 +1,7 @@
 package com.verges.smartsensors
 
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
 import android.bluetooth.le.*
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +9,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.google.android.material.snackbar.Snackbar
 import com.verges.smartsensors.databinding.ActivityDeviceScanBinding
 
 
@@ -23,15 +16,14 @@ class DeviceScanActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityDeviceScanBinding
 
-    private lateinit var bleManager: BluetoothManager
+/*    private lateinit var bleManager: BluetoothManager
     private lateinit var bleAdapter: BluetoothAdapter
     private lateinit var bleScanner: BluetoothLeScanner
     private lateinit var mHandler: Handler
-
     private var isScanning = false
-
     // Stops scanning after X seconds.
     private val scanPeriod: Long = 5000
+*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,19 +36,19 @@ class DeviceScanActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        mHandler = Handler(Looper.getMainLooper())
-        bleManager = applicationContext
-            .getSystemService(AppCompatActivity.BLUETOOTH_SERVICE) as BluetoothManager
-        bleAdapter = bleManager.adapter
-        bleScanner = bleAdapter.bluetoothLeScanner
+//        mHandler = Handler(Looper.getMainLooper())
+//        bleManager = applicationContext
+//            .getSystemService(AppCompatActivity.BLUETOOTH_SERVICE) as BluetoothManager
+//        bleAdapter = bleManager.adapter
+//        bleScanner = bleAdapter.bluetoothLeScanner
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (!bleAdapter.isEnabled) startActivity(Intent(this, MainActivity::class.java))
+//        if (!bleAdapter.isEnabled) startActivity(Intent(this, MainActivity::class.java))
 
-        scanForBleDevices(true)
+//        scanForBleDevices(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -70,7 +62,7 @@ class DeviceScanActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.menu_action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -80,7 +72,7 @@ class DeviceScanActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
-
+/*
     private fun scanForBleDevices(enable: Boolean) {
         if (enable) {
             Snackbar.make(findViewById(R.id.deviceListView), R.string.info_start_scanning, Snackbar.LENGTH_LONG).show()
@@ -122,5 +114,5 @@ class DeviceScanActivity : AppCompatActivity() {
             Log.d("ScanDeviceActivity", "onScanResult(${callbackType}): ${result?.device?.address} - ${result?.device?.name}")
             // C8:C9:A3:C5:DE:DE - tanksensor
         }
-    }
+    }*/
 }

@@ -4,13 +4,14 @@
     tools:context="com.verges.smartsensors.DeviceScanActivity">
 
     <item
-        android:id="@+id/action_rescan"
+        android:id="@+id/menu_action_rescan"
         android:icon="@drawable/sharp_refresh_24"
         android:title="@string/menu_action_rescan"
         app:showAsAction="ifRoom"
+        android:visible="false"
         />
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/menu_action_settings"
         android:title="@string/menu_action_settings"
         app:showAsAction="never"
         />

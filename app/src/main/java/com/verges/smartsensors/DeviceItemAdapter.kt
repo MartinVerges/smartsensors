@@ -8,38 +8,42 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 
-class DeviceItemAdapter
-internal constructor(private val DeviceItemsList: MutableList<DeviceItems> = mutableListOf()) :
-    RecyclerView.Adapter<DeviceItemAdapter.DeviceItemHolder>() {
+class DeviceItems internal constructor(var deviceName: String, var deviceAddress: String)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceItemHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false)
-        return DeviceItemHolder(view)
+class DeviceItemAdapter
+internal constructor(private val DeviceItemsList: MutableList<DeviceItems>) :
+    RecyclerView.Adapter<DeviceItemAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.item_row_device_entry, parent, false)
+        )
     }
 
-    override fun onBindViewHolder(holder: DeviceItemHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val item = DeviceItemsList[position]
-        holder.deviceName.text = item.deviceName
-        holder.deviceAddress.text = item.deviceAddress
+        viewHolder.deviceName.text = item.deviceName
+        viewHolder.deviceAddress.text = item.deviceAddress
 
-        holder.itemLayout.setOnClickListener {
-            if (position.odd) holder.itemView.findNavController()
+        viewHolder.itemLayout.setOnClickListener {
+            viewHolder.itemView.findNavController()
                 .navigate(R.id.action_DeviceList_to_TankLevel)
-            else holder.itemView.findNavController()
-                .navigate(R.id.action_DeviceList_to_Battery)
+
+/*            if (position.odd) viewHolder.itemView.findNavController()
+                .navigate(R.id.action_DeviceList_to_TankLevel)
+            else viewHolder.itemView.findNavController()
+                .navigate(R.id.action_DeviceList_to_Battery)*/
         }
     }
 
-    override fun getItemCount(): Int {
-        return DeviceItemsList.size
-    }
+    override fun getItemCount(): Int = DeviceItemsList.size
 
-    inner class DeviceItems internal constructor(var deviceName: String, var deviceAddress: String)
-
-    inner class DeviceItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var deviceName: TextView = itemView.findViewById(R.id.deviceName)
         var deviceAddress: TextView = itemView.findViewById(R.id.deviceAddress)
         val itemLayout: ConstraintLayout = itemView.findViewById(R.id.itemLayout)
+        val view: View = itemView
     }
 }
-
