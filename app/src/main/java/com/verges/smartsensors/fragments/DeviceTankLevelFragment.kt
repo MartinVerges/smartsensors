@@ -24,7 +24,7 @@ class DeviceTankLevelFragment : Fragment() {
             setAnimDuration(2000)
         }
 
-        binding.tanklevelValue.text = getString(R.string.tanklevel_value, 75)
+        binding.tanklevelValue.text = getString(R.string.tank_level_value, 75)
 
         return binding.root
     }

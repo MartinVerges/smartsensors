@@ -27,7 +27,7 @@
         android:id="@+id/tanklevel_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tanklevel_value"
+        android:text="@string/tank_level_value"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toTopOf="@+id/batteryMeterView"
         app:layout_constraintEnd_toEndOf="parent"

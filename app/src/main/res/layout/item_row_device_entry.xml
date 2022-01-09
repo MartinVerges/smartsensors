@@ -25,7 +25,7 @@
         app:srcCompat="@drawable/outline_bluetooth_connected_24" />
 
     <ImageView
-        android:id="@+id/signalStength"
+        android:id="@+id/signalStrength"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginEnd="4dp"
@@ -34,6 +34,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_signal_cellular_alt_24" />
+
+    <TextView
+        android:id="@+id/signalStrengthText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ble_signal_numeric"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signalStrength" />
 
     <TextView
         android:id="@+id/deviceName"

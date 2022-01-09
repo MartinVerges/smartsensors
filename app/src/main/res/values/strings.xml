@@ -39,5 +39,6 @@
 
     <string name="description_ble_image">bluetooth device</string>
     <string name="description_ble_signal">bluetooth signal strength</string>
-    <string name="tanklevel_value">%1$d %%</string>
+    <string name="ble_signal_numeric">%1$d dbm</string>
+    <string name="tank_level_value">%1$d %%</string>
 </resources>

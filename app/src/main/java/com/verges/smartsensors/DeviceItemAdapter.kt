@@ -24,6 +24,7 @@ internal constructor(private val DeviceItemsList: MutableList<DeviceItems>) :
         val item = DeviceItemsList[position]
         viewHolder.deviceName.text = item.deviceName
         viewHolder.deviceAddress.text = item.deviceAddress
+        viewHolder.rssi.text = item.rssi
 
         viewHolder.itemLayout.setOnClickListener {
             viewHolder.itemView.findNavController()
@@ -38,11 +39,12 @@ internal constructor(private val DeviceItemsList: MutableList<DeviceItems>) :
 
     override fun getItemCount(): Int = DeviceItemsList.size
 
-    class DeviceItems internal constructor(var deviceName: String, var deviceAddress: String)
+    class DeviceItems internal constructor(var deviceName: String, var deviceAddress: String, var rssi: String)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var deviceName: TextView = itemView.findViewById(R.id.deviceName)
         var deviceAddress: TextView = itemView.findViewById(R.id.deviceAddress)
+        var rssi: TextView = itemView.findViewById(R.id.signalStrengthText)
         val itemLayout: ConstraintLayout = itemView.findViewById(R.id.itemLayout)
         val view: View = itemView
     }

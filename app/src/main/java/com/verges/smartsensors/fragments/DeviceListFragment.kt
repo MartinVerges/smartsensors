@@ -21,7 +21,7 @@ import com.verges.smartsensors.R
 import com.verges.smartsensors.databinding.FragmentDeviceListBinding
 
 class DeviceListFragment : Fragment() {
-    private val TAG: String = this::class.java.simpleName
+    private val mTAG: String = this::class.java.simpleName
 
     private var _binding: FragmentDeviceListBinding? = null
     private val binding get() = _binding!!
@@ -135,11 +135,11 @@ class DeviceListFragment : Fragment() {
                 R.string.error_scanning_failed, Snackbar.LENGTH_LONG).show()
         }
         override fun onBatchScanResults(results: MutableList<ScanResult>) {
-            Log.i(TAG, "Batch scan results: ${results.size}")
+            Log.i(mTAG, "Batch scan results: ${results.size}")
             results.forEach { onScanResult(0, it) }
         }
         override fun onScanResult(callbackType: Int, result: ScanResult) {
-            Log.d(TAG, "onScanResult(${callbackType}): ${result.device.address} - ${result.device.name}")
+            Log.d(mTAG, "onScanResult(${callbackType}): ${result.device.address} - ${result.device.name}")
             // C8:C9:A3:C5:DE:DE - tanksensor
             // ScanResult{device=C8:C9:A3:C5:DE:DE, scanRecord=ScanRecord
             // [mAdvertiseFlags=6,
@@ -160,8 +160,11 @@ class DeviceListFragment : Fragment() {
 
             if (result.device.name != null && result.device.address != null) {
                 if (itemsList.filter { it.deviceAddress == result.device.address }.isNullOrEmpty()) {
-                    val item =
-                        DeviceItemAdapter.DeviceItems(result.device.name, result.device.address)
+                    val item = DeviceItemAdapter.DeviceItems(
+                        result.device.name,
+                        result.device.address,
+                        getString(R.string.ble_signal_numeric, result.rssi)
+                    )
                     itemsList.add(item)
                     binding.deviceListView.adapter?.notifyItemInserted(itemsList.size - 1)
                 }
