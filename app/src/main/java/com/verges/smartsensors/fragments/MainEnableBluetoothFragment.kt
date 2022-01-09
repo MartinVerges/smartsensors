@@ -1,4 +1,4 @@
-package com.verges.smartsensors
+package com.verges.smartsensors.fragments
 
 import android.Manifest.permission.BLUETOOTH_CONNECT
 import android.Manifest.permission.BLUETOOTH_SCAN
@@ -18,18 +18,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.verges.smartsensors.databinding.FragmentEnableBluetoothBinding
+import com.verges.smartsensors.R
+import com.verges.smartsensors.databinding.FragmentMainEnableBluetoothBinding
 
-class EnableBluetoothFragment : Fragment() {
-    private var _binding: FragmentEnableBluetoothBinding? = null
-    // This property is only valid between onCreateView and onDestroyView.
+class MainEnableBluetoothFragment : Fragment() {
+    private var _binding: FragmentMainEnableBluetoothBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentEnableBluetoothBinding.inflate(inflater, container, false)
+        _binding = FragmentMainEnableBluetoothBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -40,14 +40,14 @@ class EnableBluetoothFragment : Fragment() {
         val adapter = bluetoothManager.adapter
         if (adapter.isEnabled) {
             view.findNavController()
-                .navigate(EnableBluetoothFragmentDirections.actionEnableBluetoothFragmentToLocationRequiredFragment())
+                .navigate(R.id.action_MainEnableBluetoothFragment_to_MainLocationRequiredFragment)
         }
 
         val requestBt = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
                 Snackbar.make(view, R.string.permission_granted, Snackbar.LENGTH_LONG).show()
                 view.findNavController()
-                    .navigate(EnableBluetoothFragmentDirections.actionEnableBluetoothFragmentToLocationRequiredFragment())
+                    .navigate(R.id.action_MainEnableBluetoothFragment_to_MainLocationRequiredFragment)
             } else {
                 Snackbar.make(view, R.string.permission_denied, Snackbar.LENGTH_LONG).show()
             }

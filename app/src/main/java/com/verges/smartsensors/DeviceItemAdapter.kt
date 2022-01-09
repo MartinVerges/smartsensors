@@ -8,8 +8,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 
-class DeviceItems internal constructor(var deviceName: String, var deviceAddress: String)
-
 class DeviceItemAdapter
 internal constructor(private val DeviceItemsList: MutableList<DeviceItems>) :
     RecyclerView.Adapter<DeviceItemAdapter.ViewHolder>() {
@@ -40,6 +38,8 @@ internal constructor(private val DeviceItemsList: MutableList<DeviceItems>) :
 
     override fun getItemCount(): Int = DeviceItemsList.size
 
+    class DeviceItems internal constructor(var deviceName: String, var deviceAddress: String)
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var deviceName: TextView = itemView.findViewById(R.id.deviceName)
         var deviceAddress: TextView = itemView.findViewById(R.id.deviceAddress)
@@ -47,3 +47,4 @@ internal constructor(private val DeviceItemsList: MutableList<DeviceItems>) :
         val view: View = itemView
     }
 }
+

@@ -1,7 +1,8 @@
-package com.verges.smartsensors
+package com.verges.smartsensors.fragments
 
 import android.Manifest.permission.*
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,30 +12,33 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.verges.smartsensors.databinding.FragmentLocationRequiredBinding
-import androidx.core.app.ActivityCompat.requestPermissions
+import com.verges.smartsensors.DeviceScanActivity
+import com.verges.smartsensors.R
+import com.verges.smartsensors.databinding.FragmentMainLocationRequiredBinding
 
 
-
-
-class LocationRequiredFragment : Fragment() {
-    private var _binding: FragmentLocationRequiredBinding? = null
-    // This property is only valid between onCreateView and onDestroyView.
+class MainLocationRequiredFragment : Fragment() {
+    private var _binding: FragmentMainLocationRequiredBinding? = null
     private val binding get() = _binding!!
 
-    private val permissionArray = arrayOf(
+    private val permissionArray = mutableListOf(
         BLUETOOTH,
         BLUETOOTH_ADMIN,
-        ACCESS_BACKGROUND_LOCATION,
+//        ACCESS_BACKGROUND_LOCATION,   // no permission popup if enabled!
         ACCESS_FINE_LOCATION,
         ACCESS_COARSE_LOCATION
     )
+    init {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            permissionArray.add(BLUETOOTH_SCAN)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLocationRequiredBinding.inflate(inflater, container, false)
+        _binding = FragmentMainLocationRequiredBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -43,24 +47,20 @@ class LocationRequiredFragment : Fragment() {
 
         val permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
-        ) { p ->
-            var isGranted = true
-            p.entries.forEach {
-                if (!it.value) {
-                    isGranted = false
-                    Log.e("DEBUG", "${it.key} = ${it.value}")
-                }
+        ) { map ->
+            map.entries.filter { !it.value }.forEach {
+                Log.e("DEBUG", "${it.key} = ${it.value}")
             }
-            if (isGranted) {
+            if (map.entries.all { it.value }) {
                 startActivity(Intent(context, DeviceScanActivity::class.java))
             } else {
                 Snackbar.make(view, R.string.permission_denied, Snackbar.LENGTH_LONG).show()
             }
         }
-        permissionLauncher.launch(permissionArray)
+        permissionLauncher.launch(permissionArray.toTypedArray())
 
         view.findViewById<Button>(R.id.grant_location_button).setOnClickListener {
-            permissionLauncher.launch(permissionArray)
+            permissionLauncher.launch(permissionArray.toTypedArray())
         }
     }
 

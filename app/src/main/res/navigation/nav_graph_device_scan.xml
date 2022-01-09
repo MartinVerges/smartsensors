@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/DeviceListFragment"
-        android:name="com.verges.smartsensors.DeviceListFragment"
+        android:name="com.verges.smartsensors.fragments.DeviceListFragment"
         android:label="@string/label_device_list"
         tools:layout="@layout/fragment_device_list">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/TankLevelFragment"
-        android:name="com.verges.smartsensors.TankLevelFragment"
+        android:name="com.verges.smartsensors.fragments.DeviceTankLevelFragment"
         android:label="@string/tank_level_label"
         tools:layout="@layout/fragment_tank_level">
         <action
@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/BatteryFragment"
-        android:name="com.verges.smartsensors.BatteryFragment"
+        android:name="com.verges.smartsensors.fragments.DeviceBatteryFragment"
         android:label="@string/battery_label"
         tools:layout="@layout/fragment_battery">
         <action

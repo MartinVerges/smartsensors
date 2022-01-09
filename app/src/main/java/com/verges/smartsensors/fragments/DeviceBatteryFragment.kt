@@ -1,14 +1,16 @@
-package com.verges.smartsensors
+package com.verges.smartsensors.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.verges.smartsensors.databinding.FragmentTankLevelBinding
+import androidx.core.content.ContextCompat
+import com.verges.smartsensors.R
+import com.verges.smartsensors.databinding.FragmentBatteryBinding
 
-class TankLevelFragment : Fragment() {
-    private var _binding: FragmentTankLevelBinding? = null
+class DeviceBatteryFragment : Fragment() {
+    private var _binding: FragmentBatteryBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
@@ -16,14 +18,12 @@ class TankLevelFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTankLevelBinding.inflate(inflater, container, false)
+        _binding = FragmentBatteryBinding.inflate(inflater, container, false)
 
-        with(binding.waveLoadingView) {
-            progressValue = 75
-            setAnimDuration(2000)
-        }
+        val battery = binding.batteryMeterView
 
-        binding.tanklevelValue.text = getString(R.string.tanklevel_value, 75)
+        battery.chargeLevel = 20
+        battery.color = ContextCompat.getColor(battery.context, R.color.md_red_700)
 
         return binding.root
     }

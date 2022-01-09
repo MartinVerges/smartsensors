@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_main"
-    app:startDestination="@id/EnableBluetoothFragment">
+    app:startDestination="@id/MainEnableBluetoothFragment">
 
     <fragment
-        android:id="@+id/EnableBluetoothFragment"
-        android:name="com.verges.smartsensors.EnableBluetoothFragment"
+        android:id="@+id/MainEnableBluetoothFragment"
+        android:name="com.verges.smartsensors.fragments.MainEnableBluetoothFragment"
         android:label="@string/label_request_permissions"
-        tools:layout="@layout/fragment_enable_bluetooth">
+        tools:layout="@layout/fragment_main_enable_bluetooth">
         <action
-            android:id="@+id/action_EnableBluetoothFragment_to_LocationRequiredFragment"
-            app:destination="@id/LocationRequiredFragment" />
+            android:id="@+id/action_MainEnableBluetoothFragment_to_MainLocationRequiredFragment"
+            app:destination="@id/MainLocationRequiredFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/LocationRequiredFragment"
-        android:name="com.verges.smartsensors.LocationRequiredFragment"
+        android:id="@+id/MainLocationRequiredFragment"
+        android:name="com.verges.smartsensors.fragments.MainLocationRequiredFragment"
         android:label="@string/label_request_permissions"
-        tools:layout="@layout/fragment_location_required">
+        tools:layout="@layout/fragment_main_location_required">
         <action
-            android:id="@+id/action_LocationRequiredFragment_to_EnableBluetoothFragment"
-            app:destination="@id/EnableBluetoothFragment" />
+            android:id="@+id/action_MainLocationRequiredFragment_to_MainEnableBluetoothFragment"
+            app:destination="@id/MainEnableBluetoothFragment" />
     </fragment>
 
 </navigation>
