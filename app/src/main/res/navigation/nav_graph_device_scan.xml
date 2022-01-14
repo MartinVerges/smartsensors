@@ -12,16 +12,21 @@
         tools:layout="@layout/fragment_device_list">
         <action
             android:id="@+id/action_DeviceList_to_TankLevel"
-            app:destination="@id/TankLevelFragment" />
+            app:destination="@id/TankLevelFragment">
+        </action>
         <action
             android:id="@+id/action_DeviceList_to_Battery"
-            app:destination="@id/BatteryFragment" />
+            app:destination="@id/BatteryFragment">
+        </action>
     </fragment>
+
     <fragment
         android:id="@+id/TankLevelFragment"
         android:name="com.verges.smartsensors.fragments.DeviceTankLevelFragment"
         android:label="@string/tank_level_label"
         tools:layout="@layout/fragment_tank_level">
+        <argument android:name="deviceName" app:argType="string"/>
+        <argument android:name="deviceAddress" app:argType="string"/>
         <action
             android:id="@+id/action_TankLevelFragment_to_DeviceListFragment"
             app:destination="@id/DeviceListFragment" />

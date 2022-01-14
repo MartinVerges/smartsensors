@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,12 +17,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:wlv_borderColor="@color/md_blue_500"
         app:wlv_borderWidth="3dp"
-        app:wlv_progressValue="40"
+        app:wlv_progressValue="0"
         app:wlv_round_rectangle="true"
         app:wlv_shapeType="rectangle"
         app:wlv_waveAmplitude="15"
         app:wlv_waveColor="@color/md_blue_700"
-        app:wlv_wave_background_Color="@color/md_blue_200"/>
+        app:wlv_wave_background_Color="@color/md_blue_200" />
 
     <TextView
         android:id="@+id/tanklevel_value"
@@ -33,5 +34,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/deviceNameInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/deviceAddressInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waveLoadingView"
+        tools:text="@tools:sample/full_names" />
+
+    <TextView
+        android:id="@+id/deviceAddressInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waveLoadingView"
+        tools:text="@tools:sample/full_names" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

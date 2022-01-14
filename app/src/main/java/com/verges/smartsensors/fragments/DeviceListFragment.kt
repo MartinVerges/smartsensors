@@ -3,6 +3,7 @@ package com.verges.smartsensors.fragments
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.*
+import android.bluetooth.le.ScanSettings.*
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.verges.smartsensors.BleGattAttributes.CHARACTERISTIC_GENERIC_LEVEL
 import com.verges.smartsensors.DeviceItemAdapter
 import com.verges.smartsensors.MainActivity
 import com.verges.smartsensors.R
@@ -85,6 +87,8 @@ class DeviceListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        stopBleScanning()
+        if (!bleAdapter.isEnabled) bleScanner.stopScan(bleScanCallback)
         _binding = null
     }
 
@@ -104,12 +108,15 @@ class DeviceListFragment : Fragment() {
         Snackbar.make(mView.findViewById(R.id.deviceListView),
             R.string.info_start_scanning, Snackbar.LENGTH_LONG).show()
         isScanning = false
-        val scanSetting = ScanSettings.Builder()
-            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+        val scanSetting: ScanSettings = Builder()
+            .setScanMode(SCAN_MODE_LOW_LATENCY)
+            .setCallbackType(CALLBACK_TYPE_ALL_MATCHES)
+            .setMatchMode(MATCH_MODE_AGGRESSIVE)
+            .setNumOfMatches(MATCH_NUM_ONE_ADVERTISEMENT)
             .setReportDelay(2000)
             .build()
         val scanFilter: MutableList<ScanFilter> = mutableListOf()
-        scanFilter.add(ScanFilter.Builder().setServiceUuid(ParcelUuid.fromString("00002af9-0000-1000-8000-00805f9b34fb")).build())
+        scanFilter.add(ScanFilter.Builder().setServiceUuid(ParcelUuid(CHARACTERISTIC_GENERIC_LEVEL)).build())
         //scanFilter.add(ScanFilter.Builder().setDeviceName("xxxx").build())
         bleScanner.startScan(scanFilter, scanSetting, bleScanCallback)
     }
@@ -121,12 +128,16 @@ class DeviceListFragment : Fragment() {
             mHandler.postDelayed(stopScanCallback, scanPeriod)
         } else {
             isScanning = false
-            mHandler.removeCallbacks(startScanCallback)
-            mHandler.removeCallbacks(stopScanCallback)
-            bleScanner.stopScan(bleScanCallback)
+            stopBleScanning()
             Snackbar.make(mView.findViewById(R.id.deviceListView),
                 R.string.info_stop_scanning, Snackbar.LENGTH_LONG).show()
         }
+    }
+
+    private fun stopBleScanning() {
+        mHandler.removeCallbacks(startScanCallback)
+        mHandler.removeCallbacks(stopScanCallback)
+        bleScanner.stopScan(bleScanCallback)
     }
 
     private val bleScanCallback = object : ScanCallback() {

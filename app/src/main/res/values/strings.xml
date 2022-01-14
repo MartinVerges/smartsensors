@@ -1,12 +1,15 @@
 <resources>
-    <string name="app_name">smartsensors</string>
+    <string name="app_name">smart sensors</string>
 
     <!-- generic texts -->
-    <string name="ok">Ok</string>
     <string name="error">Error</string>
     <string name="permission_required">Permission required</string>
     <string name="permission_denied">Permission denied</string>
     <string name="permission_granted">Permission granted</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="unknown_service">Unknown service</string>
+    <string name="unknown_characteristic">Unknown BLE Characteristic</string>
 
     <!-- Bluetooth -->
     <string name="error_bt_not_enabled">Bluetooth is not enabled. Please enable it to use this App.</string>

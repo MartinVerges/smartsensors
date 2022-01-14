@@ -9,8 +9,8 @@
          If your app doesn't use Bluetooth scan results to derive physical
          location information, you can strongly assert that your app
          doesn't derive physical location. -->
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
-        android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <!--    android:usesPermissionFlags="neverForLocation" /> -->
     <!-- Needed only if your app communicates with already-paired Bluetooth devices. -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
@@ -47,6 +47,8 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.Smartsensors.NoActionBar">
         </activity>
+
+        <service android:name=".BluetoothLeService" android:enabled="true"/>
     </application>
 
 </manifest>
