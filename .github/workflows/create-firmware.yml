@@ -2,8 +2,6 @@ name: Create Firmware
 
 on:
   push:
-    tags-ignore:
-      - 'v*'
 
 jobs:
   build:
@@ -21,8 +19,14 @@ jobs:
     - name: 'Make gradle executable'
       run: chmod +x gradlew
 
-    - name: 'Build APP'
+    - name: 'Build Project'
+      run: ./gradlew build
+
+    - name: 'Assemble Release'
       run: ./gradlew assembleRelease
+
+    - name: 'Bundle Release AAB'
+      run: ./gradlew bundleRelease
 
       ## Sign our artifact##
     - name: 'Sign artifact'
@@ -35,8 +39,17 @@ jobs:
         keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
 
+    - run: find .
+
+    - name: 'Upload our ABB'
+      uses: actions/upload-artifact@v2
+      with:
+        name: Release artifact
+        path: smartsensors/build/outputs/bundle/release/*.aab
+
     - name: 'Upload our APK'
       uses: actions/upload-artifact@v2
       with:
         name: Release artifact
         path: smartsensors/build/outputs/apk/release/*.apk
+
