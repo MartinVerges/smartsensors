@@ -25,7 +25,6 @@ import com.verges.smartsensors.MainActivity
 import com.verges.smartsensors.R
 import com.verges.smartsensors.databinding.FragmentDeviceListBinding
 
-
 class DeviceListFragment : Fragment() {
     private val mTAG: String = this::class.java.simpleName
 
@@ -70,17 +69,21 @@ class DeviceListFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
     }
 
+    fun animateRefreshIcon() {
+        if (activity != null) {
+            val inflater = activity!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val iv = inflater.inflate(R.layout.refresh_rescan_view, null) as ImageView
+            iv.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.clockwise_refresh))
+            refreshMenuItem?.actionView = iv
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_action_rescan -> {
                 scanForBleDevices(true)
                 refreshMenuItem = item
-                if (activity != null) {
-                    val inflater = activity!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                    val iv = inflater.inflate(R.layout.refresh_rescan_view, null) as ImageView
-                    iv.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.clockwise_refresh))
-                    refreshMenuItem?.actionView = iv
-                }
+                animateRefreshIcon()
                 true
             }
             else -> super.onOptionsItemSelected(item)

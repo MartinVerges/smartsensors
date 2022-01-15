@@ -7,4 +7,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "smartsensors"
-include ':app'
+include ':smartsensors'
