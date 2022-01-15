@@ -2,7 +2,8 @@ name: Create Firmware
 
 on:
   push:
-
+    tags-ignore:
+      - 'v*'
 jobs:
   build:
     runs-on: ubuntu-latest
