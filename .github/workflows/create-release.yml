@@ -17,7 +17,9 @@ jobs:
         uses: actions/setup-java@v1.4.3
         with:
           java-version: '11'
-          cache: 'gradle'
+
+      - name: 'Make gradle executable'
+        run: chmod +x gradlew
 
       - name: 'Run Tests'
         run: ./gradlew test
