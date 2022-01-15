@@ -7,7 +7,7 @@
         android:id="@+id/menu_action_rescan"
         android:icon="@drawable/sharp_refresh_24"
         android:title="@string/menu_action_rescan"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:visible="false"
         />
     <item

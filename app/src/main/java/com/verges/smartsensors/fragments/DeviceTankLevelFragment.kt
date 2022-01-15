@@ -33,6 +33,10 @@ class DeviceTankLevelFragment : Fragment() {
 
     private val gattUpdateReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
+            // don't forget to add it to makeGattUpdateIntentFilter
+            // otherwise this action won't get called here
+            Log.d(mTAG, "gattUpdateReceiver ${intent.action.toString()}")
+
             when (intent.action) {
                 BluetoothLeService.ACTION_GATT_CONNECTED -> {
                     connected = true
@@ -43,14 +47,23 @@ class DeviceTankLevelFragment : Fragment() {
                     Snackbar.make(mView, R.string.disconnected, Snackbar.LENGTH_LONG).show()
                 }
                 BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED -> {
-                    // Show all the supported services and characteristics on the user interface.
-                    displayGattServices(bluetoothService?.getSupportedGattServices())
+                    Log.d(mTAG, "ACTION_GATT_SERVICES_DISCOVERED")
+                    discoverGattServices(bluetoothService?.getSupportedGattServices())
+                }
+                BluetoothLeService.ACTION_DATA_AVAILABLE -> {
+                    var level = intent.getStringExtra(BluetoothLeService.EXTRA_DATA)?.toInt() ?: 0
+                    if (level > 100) level = 100
+                    if (level < 0) level = 0
+                    Log.e(mTAG, "Action data received with current level = $level")
+
+                    binding.waveLoadingView.progressValue = level
+                    binding.tanklevelValue.text = getString(R.string.tank_level_value, level)
                 }
             }
         }
     }
 
-    private fun displayGattServices(gattServices: List<BluetoothGattService>?) {
+    private fun discoverGattServices(gattServices: List<BluetoothGattService>?) {
         if (gattServices == null) return
         // Found UUID = 00002af9-0000-1000-8000-00805f9b34fb
         // Found Characteristic = 0000181a-0000-1000-8000-00805f9b34fb
@@ -60,17 +73,12 @@ class DeviceTankLevelFragment : Fragment() {
             Log.i(mTAG, "Found Service UUID = ${gattService.uuid}")
             val gattCharacteristic = gattService.characteristics.find { it.uuid == CHARACTERISTIC_ENV_SENSING }
             if (gattCharacteristic != null) {
-                Log.e(mTAG, "gattCharacteristic.properties = ${gattCharacteristic.properties}")
+                Log.d(mTAG, "Found Characteristic = ${gattCharacteristic.uuid}")
+                Log.d(mTAG, "gattCharacteristic.properties = ${gattCharacteristic.properties}")
 
-                if (gattCharacteristic.properties and BluetoothGattCharacteristic.PROPERTY_READ != 0) {
-                    Log.d(mTAG, "BluetoothGattCharacteristic.PROPERTY_READ is true")
+                if ((gattCharacteristic.properties or BluetoothGattCharacteristic.PROPERTY_NOTIFY) != 0) {
+                    bluetoothService?.setCharacteristicNotification(gattCharacteristic, true)
                 }
-                if (gattCharacteristic.value == null) {
-                    Log.e(mTAG, "gattCharacteristic.value is empty")
-                } else {
-                    Log.e(mTAG, "Value = ${gattCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0)}")
-                }
-                Log.e(mTAG, "Found Characteristic = ${gattCharacteristic.uuid}")
             }
         }
     }
@@ -85,6 +93,7 @@ class DeviceTankLevelFragment : Fragment() {
             addAction(BluetoothLeService.ACTION_GATT_CONNECTED)
             addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED)
             addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED)
+            addAction(BluetoothLeService.ACTION_DATA_AVAILABLE)
         }
     }
 
@@ -102,13 +111,15 @@ class DeviceTankLevelFragment : Fragment() {
             componentName: ComponentName,
             service: IBinder
         ) {
+            Log.d(mTAG, "onServiceConnected($componentName, $service)")
+
             bluetoothService = (service as BluetoothLeService.LocalBinder).getService()
             bluetoothService?.let { bluetooth ->
                 if (!bluetooth.initialize()) {
                     Log.e(mTAG, "Unable to initialize Bluetooth")
                 }
                 // perform device connection
-                Log.e(mTAG, "Connecting")
+                Log.d(mTAG, "serviceConnection begin connecting")
                 bluetooth.connect(args.deviceAddress)
             }
         }

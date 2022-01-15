@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/marti/Documents/Android/smartsensors android/app/src/main/res/drawable/baseline_signal_cellular_alt_24.xml" value="0.2547008547008547" />
+        <entry key="..\:/Users/marti/Documents/Android/smartsensors android/app/src/main/res/drawable/sharp_refresh_24.xml" value="0.2547008547008547" />
         <entry key="..\:/Users/marti/Documents/Android/smartsensors android/app/src/main/res/layout/activity_device_control_activity.xml" value="0.24145299145299146" />
         <entry key="..\:/Users/marti/Documents/Android/smartsensors android/app/src/main/res/layout/activity_device_scan.xml" value="0.24145299145299146" />
         <entry key="..\:/Users/marti/Documents/Android/smartsensors android/app/src/main/res/layout/activity_main.xml" value="0.24145299145299146" />
@@ -19,6 +20,7 @@
         <entry key="..\:/Users/marti/Documents/Android/smartsensors android/app/src/main/res/layout/fragment_tank_level.xml" value="0.24145299145299146" />
         <entry key="..\:/Users/marti/Documents/Android/smartsensors android/app/src/main/res/layout/item_row.xml" value="0.24145299145299146" />
         <entry key="..\:/Users/marti/Documents/Android/smartsensors android/app/src/main/res/layout/item_row_device_entry.xml" value="0.24145299145299146" />
+        <entry key="..\:/Users/marti/Documents/Android/smartsensors android/app/src/main/res/layout/refresh_rescan_view.xml" value="0.24145299145299146" />
         <entry key="..\:/Users/marti/Documents/Android/smartsensors android/app/src/main/res/menu/menu_main.xml" value="0.24145299145299146" />
         <entry key="..\:/Users/marti/Documents/PlatformIO/Projects/tanksensor/android-app/app/src/main/res/drawable/outline_bluetooth_connected_24.xml" value="0.14188034188034188" />
         <entry key="..\:/Users/marti/Documents/PlatformIO/Projects/tanksensor/android-app/app/src/main/res/drawable/rounded_corners.xml" value="0.14188034188034188" />

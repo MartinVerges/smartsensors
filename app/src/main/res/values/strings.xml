@@ -2,6 +2,7 @@
     <string name="app_name">smart sensors</string>
 
     <!-- generic texts -->
+    <string name="refresh">refresh</string>
     <string name="error">Error</string>
     <string name="permission_required">Permission required</string>
     <string name="permission_denied">Permission denied</string>

@@ -3,9 +3,17 @@
 package com.verges.smartsensors
 
 import android.os.Build
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import java.math.BigInteger
 import java.util.*
 import kotlin.math.pow
+
+fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
+    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+}
 
 val Int.odd: Boolean
     get() = this % 2 != 0
@@ -17,7 +25,6 @@ val Int.even: Boolean
 fun Int.pow(i: Int): Int {
     return toDouble().pow(i).toInt()
 }
-
 
 private val i1s64: BigInteger = BigInteger.ONE.shiftLeft(64) // 2^64
 

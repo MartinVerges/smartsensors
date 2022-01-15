@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.*
 import android.bluetooth.le.ScanSettings.*
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -11,6 +12,8 @@ import android.os.Looper
 import android.os.ParcelUuid
 import android.util.Log
 import android.view.*
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +25,7 @@ import com.verges.smartsensors.MainActivity
 import com.verges.smartsensors.R
 import com.verges.smartsensors.databinding.FragmentDeviceListBinding
 
+
 class DeviceListFragment : Fragment() {
     private val mTAG: String = this::class.java.simpleName
 
@@ -30,13 +34,15 @@ class DeviceListFragment : Fragment() {
 
     lateinit var mView: View
 
+    private var refreshMenuItem: MenuItem? = null
+
     private lateinit var bleManager: BluetoothManager
     private lateinit var bleAdapter: BluetoothAdapter
     private lateinit var bleScanner: BluetoothLeScanner
     private lateinit var mHandler: Handler
 
-    private val scanDelay: Long = 500
-    private val scanPeriod: Long = 30000
+    private val scanDelay: Long = 1000
+    private val scanPeriod: Long = 15000
     private var isScanning = false
 
     private var itemsList: MutableList<DeviceItemAdapter.DeviceItems> = mutableListOf()
@@ -68,6 +74,13 @@ class DeviceListFragment : Fragment() {
         return when (item.itemId) {
             R.id.menu_action_rescan -> {
                 scanForBleDevices(true)
+                refreshMenuItem = item
+                if (activity != null) {
+                    val inflater = activity!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    val iv = inflater.inflate(R.layout.refresh_rescan_view, null) as ImageView
+                    iv.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.clockwise_refresh))
+                    refreshMenuItem?.actionView = iv
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -79,8 +92,7 @@ class DeviceListFragment : Fragment() {
 
         mView = view
         mHandler = Handler(Looper.getMainLooper())
-        bleManager = view.context
-            .getSystemService(AppCompatActivity.BLUETOOTH_SERVICE) as BluetoothManager
+        bleManager = view.context.getSystemService(AppCompatActivity.BLUETOOTH_SERVICE) as BluetoothManager
         bleAdapter = bleManager.adapter
         bleScanner = bleAdapter.bluetoothLeScanner
     }
@@ -93,14 +105,14 @@ class DeviceListFragment : Fragment() {
     }
 
     override fun onPause() {
-        super.onPause()
         scanForBleDevices(false)
+        super.onPause()
     }
 
     override fun onResume() {
-        super.onResume()
         if (!bleAdapter.isEnabled) startActivity(Intent(this.context, MainActivity::class.java))
         scanForBleDevices(true)
+        super.onResume()
     }
 
     private val stopScanCallback = Runnable { scanForBleDevices(false) }
@@ -113,13 +125,13 @@ class DeviceListFragment : Fragment() {
             .setCallbackType(CALLBACK_TYPE_ALL_MATCHES)
             .setMatchMode(MATCH_MODE_AGGRESSIVE)
             .setNumOfMatches(MATCH_NUM_ONE_ADVERTISEMENT)
-            .setReportDelay(2000)
+            .setReportDelay(500)
             .build()
         val scanFilter: MutableList<ScanFilter> = mutableListOf()
         scanFilter.add(ScanFilter.Builder().setServiceUuid(ParcelUuid(CHARACTERISTIC_GENERIC_LEVEL)).build())
-        //scanFilter.add(ScanFilter.Builder().setDeviceName("xxxx").build())
         bleScanner.startScan(scanFilter, scanSetting, bleScanCallback)
     }
+
     private fun scanForBleDevices(enable: Boolean) {
         if (enable) {
             isScanning = true
@@ -131,6 +143,11 @@ class DeviceListFragment : Fragment() {
             stopBleScanning()
             Snackbar.make(mView.findViewById(R.id.deviceListView),
                 R.string.info_stop_scanning, Snackbar.LENGTH_LONG).show()
+
+            if (refreshMenuItem != null && refreshMenuItem?.actionView != null) {
+                refreshMenuItem?.actionView?.clearAnimation()
+                refreshMenuItem?.actionView = null
+            }
         }
     }
 
@@ -183,4 +200,3 @@ class DeviceListFragment : Fragment() {
         }
     }
 }
-
