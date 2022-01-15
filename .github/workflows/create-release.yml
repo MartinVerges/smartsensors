@@ -25,18 +25,24 @@ jobs:
         run: ./gradlew test
 
       - name: 'Build APP'
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build
 
       ## Sign our artifact##
       - name: 'Sign artifact'
         id: signArtifact
         uses: r0adkll/sign-android-release@v1.0.1
         with:
-          releaseDirectory: app/build/outputs/apk/release/
+          releaseDirectory: smartsensors/build/outputs/apk/release/
           alias: ${{ secrets.KEYALIAS }}
           signingKeyBase64: ${{ secrets.KEYSTORE }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: 'Upload our APK'
+        uses: actions/upload-artifact@v2
+        with:
+          name: Release artifact
+          path: smartsensors/build/outputs/apk/release/*.apk
 
       - name: 'Create Release'
         id: create_release
@@ -48,3 +54,23 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+
+      - name: 'Save name of our Artifact'
+        id: set-result-artifact
+        run: |
+          ARTIFACT_PATHNAME_APK=$(ls smartsensors/build/outputs/apk/release/*.apk | head -n 1)
+          ARTIFACT_NAME_APK=$(basename $ARTIFACT_PATHNAME_APK)
+          echo "ARTIFACT_NAME_APK is " ${ARTIFACT_NAME_APK}
+          echo "ARTIFACT_PATHNAME_APK=${ARTIFACT_PATHNAME_APK}" >> $GITHUB_ENV
+          echo "ARTIFACT_NAME_APK=${ARTIFACT_NAME_APK}" >> $GITHUB_ENV
+
+      - name: 'Upload our Artifact Assets'
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.ARTIFACT_PATHNAME_APK }}
+          asset_name: ${{ env.ARTIFACT_NAME_APK }}
+          asset_content_type: application/zip
