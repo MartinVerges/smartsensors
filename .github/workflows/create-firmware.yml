@@ -22,8 +22,6 @@ jobs:
     - name: 'Build APP'
       run: ./gradlew assembleRelease
 
-    - run: find .
-
       ## Sign our artifact##
     - name: 'Sign artifact'
       id: signArtifact

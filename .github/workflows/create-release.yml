@@ -24,6 +24,8 @@ jobs:
       - name: 'Build APP'
         run: ./gradlew assembleRelease
 
+      - run: find .
+
       ## Sign our artifact##
       - name: 'Sign artifact'
         id: signArtifact
@@ -34,6 +36,8 @@ jobs:
           signingKeyBase64: ${{ secrets.KEYSTORE }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - run: find .
 
       - name: 'Upload our APK'
         uses: actions/upload-artifact@v2
