@@ -21,8 +21,14 @@ jobs:
       - name: 'Make gradle executable'
         run: chmod +x gradlew
 
-      - name: 'Build APP'
+      - name: 'Build Project'
+        run: ./gradlew build
+
+      - name: 'Assemble Release'
         run: ./gradlew assembleRelease
+
+      - name: 'Bundle Release AAB'
+        run: ./gradlew bundleRelease
 
       - run: find .
 
@@ -31,13 +37,19 @@ jobs:
         id: signArtifact
         uses: r0adkll/sign-android-release@v1.0.1
         with:
-          releaseDirectory: smartsensors/build/outputs/apk/release/
+          releaseDirectory: smartsensors/build/outputs/bundle/release
           alias: ${{ secrets.KEYALIAS }}
           signingKeyBase64: ${{ secrets.KEYSTORE }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - run: find .
+
+      - name: 'Upload our ABB'
+        uses: actions/upload-artifact@v2
+        with:
+          name: Release artifact
+          path: smartsensors/build/outputs/bundle/release/*.aab
 
       - name: 'Upload our APK'
         uses: actions/upload-artifact@v2
@@ -59,19 +71,31 @@ jobs:
       - name: 'Save name of our Artifact'
         id: set-result-artifact
         run: |
-          ARTIFACT_PATHNAME_APK=$(ls smartsensors/build/outputs/apk/release/*.apk | head -n 1)
-          ARTIFACT_NAME_APK=$(basename $ARTIFACT_PATHNAME_APK)
-          echo "ARTIFACT_NAME_APK is " ${ARTIFACT_NAME_APK}
-          echo "ARTIFACT_PATHNAME_APK=${ARTIFACT_PATHNAME_APK}" >> $GITHUB_ENV
-          echo "ARTIFACT_NAME_APK=${ARTIFACT_NAME_APK}" >> $GITHUB_ENV
+          AAB_FILE=$(ls smartsensors/build/outputs/bundle/release/*.aab | head -n 1)
+          APK_FILE=$(ls smartsensors/build/outputs/apk/release/*.apk | head -n 1)
+          echo "AAB_FILE=${AAB_FILE}" >> $GITHUB_ENV
+          echo "AAB File = $AAB_FILE"
+          echo "APK_FILE=${APK_FILE}" >> $GITHUB_ENV
+          echo "APK File = $APK_FILE"
 
-      - name: 'Upload our Artifact Assets'
+      - name: 'Upload AAB Artifact to release'
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.ARTIFACT_PATHNAME_APK }}
-          asset_name: ${{ env.ARTIFACT_NAME_APK }}
+          asset_path: ${{ env.AAB_FILE }}
+          asset_name: smartsensors.aab
+          asset_content_type: application/zip
+
+      - name: 'Upload AAB Artifact to release'
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.APK_FILE }}
+          asset_name: smartsensors.apk
           asset_content_type: application/zip
