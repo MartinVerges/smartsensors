@@ -16,10 +16,12 @@ The following sensors are currently supported:
 ## Show me how it looks
 
 #### Screenshots from the mobile UI
-<img src="images/device_list.jpg?raw=true" alt="Device Scan List" width="20%">
-<img src="images/tank_level.jpg?raw=true" alt="Tank level live view" width="20%">
+<img src="screenshots/scan_list.jpg?raw=true" alt="Device Scan List" width="20%"><img src="screenshots/tank_level.jpg?raw=true" alt="Tank level live view" width="20%">
 
-## How to build this PlatformIO based project
+## How to build this Android Project
+
+The best way to use it, by opening it with [Android Stuido](https://developer.android.com/studio).
+If you want to run it on the command line, please proceed as follows:
 
 1. Install Java runtime 11 or newer
 2. Run these commands:
