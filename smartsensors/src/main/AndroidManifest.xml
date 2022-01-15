@@ -16,7 +16,6 @@
     <!-- Needed only if your app uses Bluetooth scan results to derive physical location. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <!-- Specify the hardware requirements -->
     <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
@@ -41,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DeviceScanActivity"
+            android:name=".DeviceActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Smartsensors.NoActionBar">
@@ -49,5 +48,4 @@
 
         <service android:name=".BluetoothLeService" android:enabled="true"/>
     </application>
-
 </manifest>

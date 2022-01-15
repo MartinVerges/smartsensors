@@ -24,6 +24,7 @@ import com.verges.smartsensors.DeviceItemAdapter
 import com.verges.smartsensors.MainActivity
 import com.verges.smartsensors.R
 import com.verges.smartsensors.databinding.FragmentDeviceListBinding
+import kotlin.math.log
 
 class DeviceListFragment : Fragment() {
     private val mTAG: String = this::class.java.simpleName
@@ -170,7 +171,7 @@ class DeviceListFragment : Fragment() {
             results.forEach { onScanResult(0, it) }
         }
         override fun onScanResult(callbackType: Int, result: ScanResult) {
-            Log.d(mTAG, "onScanResult(${callbackType}): ${result.device.address} - ${result.device.name}")
+            Log.d(mTAG, "onScanResult(${callbackType}): ${result.device.address} - ${result.device.name ?: result.scanRecord?.deviceName}")
             // C8:C9:A3:C5:DE:DE - tanksensor
             // ScanResult{device=C8:C9:A3:C5:DE:DE, scanRecord=ScanRecord
             // [mAdvertiseFlags=6,
@@ -189,15 +190,25 @@ class DeviceListFragment : Fragment() {
             // txPower=127,
             // periodicAdvertisingInterval=0}
 
-            if (result.device.name != null && result.device.address != null) {
+            // on Xiaomi Note 10 for whatever reason device.name is null but scanRecord contains it
+            val devName = result.device.name ?: result.scanRecord?.deviceName ?: "Unknown hostname"
+            if (result.device.address != null) {
                 if (itemsList.filter { it.deviceAddress == result.device.address }.isNullOrEmpty()) {
+                    // non existing entry
                     val item = DeviceItemAdapter.DeviceItems(
-                        result.device.name,
+                        devName,
                         result.device.address,
                         getString(R.string.ble_signal_numeric, result.rssi)
                     )
                     itemsList.add(item)
                     binding.deviceListView.adapter?.notifyItemInserted(itemsList.size - 1)
+                } else {
+                    itemsList.withIndex()
+                        .filter { it.value.deviceAddress == result.device.address }
+                        .forEach {
+                            it.value.rssi = getString(R.string.ble_signal_numeric, result.rssi)
+                            binding.deviceListView.adapter?.notifyItemChanged(it.index)
+                        }
                 }
             }
         }

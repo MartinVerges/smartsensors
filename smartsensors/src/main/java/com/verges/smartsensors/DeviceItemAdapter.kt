@@ -1,17 +1,13 @@
 package com.verges.smartsensors
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.verges.smartsensors.fragments.DeviceListFragmentDirections
-import com.verges.smartsensors.fragments.DeviceTankLevelFragment
-import com.verges.smartsensors.fragments.DeviceTankLevelFragmentDirections
 
 class DeviceItemAdapter
 internal constructor(private val DeviceItemsList: MutableList<DeviceItems>) :

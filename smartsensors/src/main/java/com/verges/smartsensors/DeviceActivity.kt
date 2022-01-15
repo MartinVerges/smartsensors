@@ -9,17 +9,17 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.verges.smartsensors.databinding.ActivityDeviceScanBinding
+import com.verges.smartsensors.databinding.ActivityDeviceBinding
 
 
-class DeviceScanActivity : AppCompatActivity() {
+class DeviceActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityDeviceScanBinding
+    private lateinit var binding: ActivityDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityDeviceScanBinding.inflate(layoutInflater)
+        binding = ActivityDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 

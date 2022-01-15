@@ -12,7 +12,7 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.verges.smartsensors.DeviceScanActivity
+import com.verges.smartsensors.DeviceActivity
 import com.verges.smartsensors.R
 import com.verges.smartsensors.databinding.FragmentMainLocationRequiredBinding
 
@@ -52,7 +52,7 @@ class MainLocationRequiredFragment : Fragment() {
                 Log.e("DEBUG", "${it.key} = ${it.value}")
             }
             if (map.entries.all { it.value }) {
-                startActivity(Intent(context, DeviceScanActivity::class.java))
+                startActivity(Intent(context, DeviceActivity::class.java))
             } else {
                 Snackbar.make(view, R.string.permission_denied, Snackbar.LENGTH_LONG).show()
             }

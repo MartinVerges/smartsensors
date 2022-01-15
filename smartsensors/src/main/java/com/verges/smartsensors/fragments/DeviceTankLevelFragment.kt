@@ -142,13 +142,11 @@ class DeviceTankLevelFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTankLevelBinding.inflate(inflater, container, false)
-
-        with(binding.waveLoadingView) {
-            progressValue = 0
-            setAnimDuration(2000)
-        }
-
         with(binding) {
+            with(waveLoadingView) {
+                progressValue = 0
+                setAnimDuration(2000)
+            }
             tanklevelValue.text = getString(R.string.tank_level_value, 0)
             deviceAddressInfo.text = args.deviceAddress
             deviceNameInfo.text = args.deviceName
@@ -159,6 +157,7 @@ class DeviceTankLevelFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        bluetoothService?.onDestroy()
         _binding = null
     }
 }
