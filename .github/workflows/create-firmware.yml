@@ -30,10 +30,20 @@ jobs:
     - name: 'Bundle Release AAB'
       run: ./gradlew bundleRelease
 
-      ## Sign our artifact##
-    - name: 'Sign artifact'
-      id: signArtifact
-      uses: r0adkll/sign-android-release@v1.0.1
+    ## Sign our artifact##
+    - name: 'Sign artifact AAB'
+      id: signAAB
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: smartsensors/build/outputs/bundle/release/
+        alias: ${{ secrets.KEYALIAS }}
+        signingKeyBase64: ${{ secrets.KEYSTORE }}
+        keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+    - name: 'Sign artifact APK'
+      id: signAPK
+      uses: r0adkll/sign-android-release@v1
       with:
         releaseDirectory: smartsensors/build/outputs/apk/release/
         alias: ${{ secrets.KEYALIAS }}
@@ -46,12 +56,11 @@ jobs:
     - name: 'Upload our ABB'
       uses: actions/upload-artifact@v2
       with:
-        name: Release artifact
-        path: smartsensors/build/outputs/bundle/release/*.aab
+        name: Release artifact AAB
+        path: ${{ steps.signAAB.outputs.signedReleaseFile }}
 
     - name: 'Upload our APK'
       uses: actions/upload-artifact@v2
       with:
-        name: Release artifact
-        path: smartsensors/build/outputs/apk/release/*.apk
-
+        name: Release artifact APK
+        path: ${{ steps.signAPK.outputs.signedReleaseFile }}
