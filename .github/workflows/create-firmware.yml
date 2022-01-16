@@ -56,11 +56,11 @@ jobs:
     - name: 'Upload our ABB'
       uses: actions/upload-artifact@v2
       with:
-        name: Release artifact AAB
+        name: smartsensors.aab
         path: ${{ steps.signAAB.outputs.signedReleaseFile }}
 
     - name: 'Upload our APK'
       uses: actions/upload-artifact@v2
       with:
-        name: Release artifact APK
+        name: smartsensors.apk
         path: ${{ steps.signAPK.outputs.signedReleaseFile }}
