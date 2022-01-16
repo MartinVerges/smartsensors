@@ -24,15 +24,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: 'Build Project'
-        run: ./gradlew build
+        run: ./gradlew --no-daemon build
 
       - name: 'Assemble Release'
-        run: ./gradlew assembleRelease
+        run: ./gradlew --no-daemon assembleRelease
 
       - name: 'Bundle Release AAB'
-        run: ./gradlew bundleRelease
-
-      - run: find .
+        run: ./gradlew --no-daemon bundleRelease
 
       ## Sign our artifact##
       - name: 'Sign artifact AAB'
