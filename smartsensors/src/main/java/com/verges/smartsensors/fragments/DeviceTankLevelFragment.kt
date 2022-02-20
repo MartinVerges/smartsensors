@@ -134,7 +134,7 @@ class DeviceTankLevelFragment : Fragment() {
         mView = view
 
         val gattServiceIntent = Intent(view.context, BluetoothLeService::class.java)
-        activity!!.bindService(gattServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+        requireActivity().bindService(gattServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onCreateView(

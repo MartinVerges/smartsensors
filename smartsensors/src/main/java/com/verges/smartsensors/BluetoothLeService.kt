@@ -1,15 +1,17 @@
 package com.verges.smartsensors
 
+import android.Manifest.permission.BLUETOOTH_CONNECT
 import android.app.Service
 import android.bluetooth.*
 import android.bluetooth.BluetoothGatt.GATT_SUCCESS
 import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Binder
 import android.os.IBinder
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.verges.smartsensors.BleGattAttributes.CHARACTERISTIC_ENV_SENSING
-import java.util.*
 
 class BluetoothLeService : Service() {
     private val mTAG: String = this::class.java.simpleName
@@ -38,7 +40,9 @@ class BluetoothLeService : Service() {
         Log.d(mTAG, "calling onUnbind(${intent.toString()})")
 
         bluetoothGatt?.let { gatt ->
-            gatt.close()
+            if (ActivityCompat.checkSelfPermission(this, BLUETOOTH_CONNECT) == PERMISSION_GRANTED) {
+                gatt.close()
+            }
             bluetoothGatt = null
         }
         return super.onUnbind(intent)
@@ -48,20 +52,13 @@ class BluetoothLeService : Service() {
         Log.d(mTAG, "calling onDestroy()")
 
         bluetoothGatt?.let { gatt ->
-            gatt.close()
+            if (ActivityCompat.checkSelfPermission(this, BLUETOOTH_CONNECT) == PERMISSION_GRANTED) {
+                gatt.close()
+            }
             bluetoothGatt = null
         }
         return super.onDestroy()
     }
-    /*
-    private fun readCharacteristic(characteristic: BluetoothGattCharacteristic) {
-        Log.d(mTAG, "calling readCharacteristic(${characteristic})")
-
-        bluetoothGatt?.readCharacteristic(characteristic) ?: run {
-            Log.w(mTAG, "BluetoothGatt not initialized")
-            return
-        }
-    }*/
 
     fun setCharacteristicNotification(
         characteristic: BluetoothGattCharacteristic,
@@ -73,7 +70,9 @@ class BluetoothLeService : Service() {
             if (CHARACTERISTIC_ENV_SENSING == characteristic.uuid) {
                 val descriptor = characteristic.getDescriptor(BleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG)
                 descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-                bluetoothGatt?.writeDescriptor(descriptor)
+                if (ActivityCompat.checkSelfPermission(this, BLUETOOTH_CONNECT) == PERMISSION_GRANTED) {
+                    bluetoothGatt?.writeDescriptor(descriptor)
+                }
             }
             bluetoothGatt?.setCharacteristicNotification(characteristic, enabled)
         } else {
@@ -85,28 +84,30 @@ class BluetoothLeService : Service() {
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             Log.d(mTAG, "calling onConnectionStateChange()")
 
-            if(status == GATT_SUCCESS) {
-                when (newState) {
-                    BluetoothProfile.STATE_CONNECTED -> {
-                        Log.i(mTAG, "Successfully connected to the GATT Server")
-                        connectionState = STATE_CONNECTED
-                        broadcastUpdate(ACTION_GATT_CONNECTED)
-                        bluetoothGatt?.discoverServices()
+            if (ActivityCompat.checkSelfPermission(baseContext, BLUETOOTH_CONNECT) == PERMISSION_GRANTED) {
+                if(status == GATT_SUCCESS) {
+                    when (newState) {
+                        BluetoothProfile.STATE_CONNECTED -> {
+                            Log.i(mTAG, "Successfully connected to the GATT Server")
+                            connectionState = STATE_CONNECTED
+                            broadcastUpdate(ACTION_GATT_CONNECTED)
+                            bluetoothGatt?.discoverServices()
+                        }
+                        BluetoothProfile.STATE_DISCONNECTED -> {
+                            Log.e(mTAG, "Disconnected from the GATT Server")
+                            connectionState = STATE_DISCONNECTED
+                            broadcastUpdate(ACTION_GATT_DISCONNECTED)
+                            gatt.close()
+                            bluetoothGatt?.close()
+                        }
+                        else -> {
+                            Log.i(mTAG, "onConnectionStateChange($status, $newState)")
+                        }
                     }
-                    BluetoothProfile.STATE_DISCONNECTED -> {
-                        Log.e(mTAG, "Disconnected from the GATT Server")
-                        connectionState = STATE_DISCONNECTED
-                        broadcastUpdate(ACTION_GATT_DISCONNECTED)
-                        gatt.close()
-                        bluetoothGatt?.close()
-                    }
-                    else -> {
-                        Log.i(mTAG, "onConnectionStateChange($status, $newState)")
-                    }
+                } else {
+                    gatt.close()
+                    bluetoothGatt?.close()
                 }
-            } else {
-                gatt.close()
-                bluetoothGatt?.close()
             }
         }
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
@@ -176,8 +177,10 @@ class BluetoothLeService : Service() {
             false
         } else {
             try {
-                val device = bleAdapter.getRemoteDevice(address)
-                bluetoothGatt = device.connectGatt(this, false, bluetoothGattCallback)
+                if (ActivityCompat.checkSelfPermission(this, BLUETOOTH_CONNECT) == PERMISSION_GRANTED) {
+                    val device = bleAdapter.getRemoteDevice(address)
+                    bluetoothGatt = device.connectGatt(this, false, bluetoothGattCallback)
+                }
             } catch (exception: IllegalArgumentException) {
                 Log.e(mTAG, "Device not found with provided address.")
                 return false

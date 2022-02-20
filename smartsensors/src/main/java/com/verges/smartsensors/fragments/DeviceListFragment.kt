@@ -1,11 +1,14 @@
 package com.verges.smartsensors.fragments
 
+import android.Manifest.permission.BLUETOOTH_CONNECT
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.*
 import android.bluetooth.le.ScanSettings.*
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,6 +18,7 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,8 +28,8 @@ import com.verges.smartsensors.DeviceItemAdapter
 import com.verges.smartsensors.MainActivity
 import com.verges.smartsensors.R
 import com.verges.smartsensors.databinding.FragmentDeviceListBinding
-import kotlin.math.log
 
+@SuppressLint("MissingPermission")
 class DeviceListFragment : Fragment() {
     private val mTAG: String = this::class.java.simpleName
 
@@ -70,9 +74,9 @@ class DeviceListFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
     }
 
-    fun animateRefreshIcon() {
+    private fun animateRefreshIcon() {
         if (activity != null) {
-            val inflater = activity!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val iv = inflater.inflate(R.layout.refresh_rescan_view, null) as ImageView
             iv.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.clockwise_refresh))
             refreshMenuItem?.actionView = iv
@@ -104,7 +108,11 @@ class DeviceListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         stopBleScanning()
-        if (!bleAdapter.isEnabled) bleScanner.stopScan(bleScanCallback)
+        if (!bleAdapter.isEnabled) {
+            if (ActivityCompat.checkSelfPermission(requireContext(), BLUETOOTH_CONNECT) == PERMISSION_GRANTED) {
+                bleScanner.stopScan(bleScanCallback)
+            }
+        }
         _binding = null
     }
 
