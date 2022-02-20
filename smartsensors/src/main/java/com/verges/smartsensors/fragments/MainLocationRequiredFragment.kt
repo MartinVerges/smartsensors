@@ -21,16 +21,33 @@ class MainLocationRequiredFragment : Fragment() {
     private var _binding: FragmentMainLocationRequiredBinding? = null
     private val binding get() = _binding!!
 
-    private val permissionArray = mutableListOf(
-        BLUETOOTH,
-        BLUETOOTH_ADMIN,
+    private val permissionArray = mutableListOf<String>()
+//        mutableListOf(
+//        BLUETOOTH,                    // only up to API <= 30 (Android 11)
+//        BLUETOOTH_ADMIN,              // only up to API <= 30 (Android 11)
+//        BLUETOOTH_SCAN,               // only from API >= 31 (android 12)
 //        ACCESS_BACKGROUND_LOCATION,   // no permission popup if enabled!
-        ACCESS_FINE_LOCATION,
-        ACCESS_COARSE_LOCATION
-    )
+//        ACCESS_FINE_LOCATION,         // only up to API <= 30 (Android 11)
+//        ACCESS_COARSE_LOCATION        // only up to API <= 28 (Android 9)
+//    )
     init {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            permissionArray.add(BLUETOOTH_SCAN)
+        with(permissionArray) {
+            when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> { // Android 12 API 31
+                    add(BLUETOOTH_SCAN)
+                }
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> { // Android 10 API 29
+                    add(BLUETOOTH)
+                    add(BLUETOOTH_ADMIN)
+                    add(ACCESS_FINE_LOCATION)
+                }
+                else -> { //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) { // Android 9 API 28
+                    add(BLUETOOTH)
+                    add(BLUETOOTH_ADMIN)
+                    add(ACCESS_COARSE_LOCATION)
+                    add(ACCESS_FINE_LOCATION)
+                }
+            }
         }
     }
 
