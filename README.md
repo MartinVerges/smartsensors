@@ -1,3 +1,6 @@
+[![Create Firmware](https://github.com/MartinVerges/smartsensors/actions/workflows/create-firmware.yml/badge.svg)](https://github.com/MartinVerges/smartsensors/actions/workflows/create-firmware.yml)
+[![Create Release](https://github.com/MartinVerges/smartsensors/actions/workflows/create-release.yml/badge.svg)](https://github.com/MartinVerges/smartsensors/actions/workflows/create-release.yml)
+
 # Smart Sensors Android App
 
 This Android APP is used to connect a current Android phone with a smart sensor via Bluetooth Low Energy (BLE).
