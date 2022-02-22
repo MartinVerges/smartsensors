@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.verges.smartsensors"
         minSdk 28
-        targetSdk 31
+        targetSdk 28
         versionCode gitVersionCode
         versionName gitVersionName
 

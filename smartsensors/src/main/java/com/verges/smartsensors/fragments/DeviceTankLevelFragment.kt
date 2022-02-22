@@ -12,9 +12,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import com.verges.smartsensors.*
 import com.verges.smartsensors.BleGattAttributes.CHARACTERISTIC_ENV_SENSING
 import com.verges.smartsensors.BleGattAttributes.CHARACTERISTIC_GENERIC_LEVEL
+import com.verges.smartsensors.BluetoothLeService
+import com.verges.smartsensors.R
 import com.verges.smartsensors.databinding.FragmentTankLevelBinding
 
 

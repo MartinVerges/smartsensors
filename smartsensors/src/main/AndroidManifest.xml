@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.verges.smartsensors">
 
-    <!-- Request legacy Bluetooth permissions on older devices. -->
+    <!-- Allows applications to connect to paired bluetooth devices (API 1). -->
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <!-- Allows applications to discover and pair bluetooth devices (API 1). -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
-    <!-- Needed only if your app looks for Bluetooth devices.
-         If your app doesn't use Bluetooth scan results to derive physical
-         location information, you can strongly assert that your app
-         doesn't derive physical location. -->
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
-        android:usesPermissionFlags="neverForLocation" />
-    <!-- Needed only if your app communicates with already-paired Bluetooth devices. -->
+    <!-- Required to be able to discover and pair nearby Bluetooth devices (API 31). -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
+    <!-- Needed only if your app communicates with already-paired Bluetooth devices (API 31). -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
-    <!-- Needed only if your app uses Bluetooth scan results to derive physical location. -->
+    <!-- Allows an app to access approximate location (API 1). -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="28"/>
+    <!-- Allows an app to access precise location (API 1). -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- Specify the hardware requirements -->

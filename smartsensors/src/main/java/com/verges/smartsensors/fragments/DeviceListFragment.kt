@@ -1,6 +1,6 @@
 package com.verges.smartsensors.fragments
 
-import android.Manifest.permission.BLUETOOTH_CONNECT
+import android.Manifest.permission.BLUETOOTH
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
@@ -109,7 +109,7 @@ class DeviceListFragment : Fragment() {
         super.onDestroyView()
         stopBleScanning()
         if (!bleAdapter.isEnabled) {
-            if (ActivityCompat.checkSelfPermission(requireContext(), BLUETOOTH_CONNECT) == PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(requireContext(), BLUETOOTH) == PERMISSION_GRANTED) {
                 bleScanner.stopScan(bleScanCallback)
             }
         }
@@ -215,7 +215,8 @@ class DeviceListFragment : Fragment() {
                         .filter { it.value.deviceAddress == result.device.address }
                         .forEach {
                             it.value.rssi = getString(R.string.ble_signal_numeric, result.rssi)
-                            binding.deviceListView.adapter?.notifyItemChanged(it.index)
+                            // notifyItem causes flickering...
+                            //binding.deviceListView.adapter?.notifyItemChanged(it.index)
                         }
                 }
             }
