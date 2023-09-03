@@ -40,7 +40,7 @@ class BluetoothLeService : Service() {
         Log.d(mTAG, "calling onUnbind(${intent.toString()})")
 
         bluetoothGatt?.let { gatt ->
-            if (ActivityCompat.checkSelfPermission(this, BLUETOOTH) == PERMISSION_GRANTED) {
+            if (checkPermission()) {
                 gatt.close()
             } else {
                 Log.d(mTAG, "missing permission")
@@ -54,7 +54,7 @@ class BluetoothLeService : Service() {
         Log.d(mTAG, "calling onDestroy()")
 
         bluetoothGatt?.let { gatt ->
-            if (ActivityCompat.checkSelfPermission(this, BLUETOOTH) == PERMISSION_GRANTED) {
+            if (checkPermission()) {
                 gatt.close()
             }
             bluetoothGatt = null
@@ -72,7 +72,7 @@ class BluetoothLeService : Service() {
             if (CHARACTERISTIC_ENV_SENSING == characteristic.uuid) {
                 val descriptor = characteristic.getDescriptor(BleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG)
                 descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-                if (ActivityCompat.checkSelfPermission(this, BLUETOOTH) == PERMISSION_GRANTED) {
+                if (checkPermission()) {
                     bluetoothGatt?.writeDescriptor(descriptor)
                 }
             }
@@ -86,7 +86,7 @@ class BluetoothLeService : Service() {
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             Log.d(mTAG, "calling onConnectionStateChange()")
 
-            if (ActivityCompat.checkSelfPermission(baseContext, BLUETOOTH) == PERMISSION_GRANTED) {
+            if (checkPermission()) {
                 if(status == GATT_SUCCESS) {
                     when (newState) {
                         BluetoothProfile.STATE_CONNECTED -> {
@@ -136,6 +136,14 @@ class BluetoothLeService : Service() {
         }
         return true
     }
+    
+    private fun checkPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PERMISSION_GRANTED;
+        } else {
+            ActivityCompat.checkSelfPermission(this, BLUETOOTH) == PERMISSION_GRANTED;
+        }
+    }
 
     private fun broadcastUpdate(action: String) = sendBroadcast(Intent(action))
     private fun broadcastUpdate(action: String, characteristic: BluetoothGattCharacteristic) {
@@ -179,7 +187,7 @@ class BluetoothLeService : Service() {
             false
         } else {
             try {
-                if (ActivityCompat.checkSelfPermission(this, BLUETOOTH) == PERMISSION_GRANTED) {
+                if (checkPermission()) {
                     val device = bleAdapter.getRemoteDevice(address)
                     bluetoothGatt = device.connectGatt(this, false, bluetoothGattCallback)
                 }
