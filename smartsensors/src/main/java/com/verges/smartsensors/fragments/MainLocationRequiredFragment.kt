@@ -35,6 +35,7 @@ class MainLocationRequiredFragment : Fragment() {
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> { // Android 12 API 31
                     add(BLUETOOTH_SCAN)
+                    add(BLUETOOTH_CONNECT)
                     add(ACCESS_FINE_LOCATION)
                 }
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> { // Android 10 API 29
@@ -45,7 +46,6 @@ class MainLocationRequiredFragment : Fragment() {
                 else -> { //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) { // Android 9 API 28
                     add(BLUETOOTH)
                     add(BLUETOOTH_ADMIN)
-                    add(BLUETOOTH_CONNECT)
                     add(ACCESS_COARSE_LOCATION)
                     add(ACCESS_FINE_LOCATION)
                 }
